@@ -8,6 +8,7 @@ from .models import User, Interest, Connection
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
+import random
 
 def base(request):
     return render(request, 'base.html')
@@ -60,47 +61,26 @@ def login_view(request):
     if request.method == 'POST':
         email_or_phone = request.POST['email_or_phone']
         password = request.POST['password']
-        print(f"Username: {email_or_phone}, Password: {password}")
+        # print(f"Username: {email_or_phone}, Password: {password}")
         # import pdb; pdb.set_trace()
-        user = authenticate(request,  username=email_or_phone, password=password)
-        
-        print(f"authentication: {user}")
-        if user is not None:
-            login(request, user)
-            return redirect('home')
-        else:
-            return render(request, 'chat/LoginPage.html', {'error': 'Invalid login credentials.'})
+        try:
+            user_ = User.objects.get(email=email_or_phone)
+        except User.DoesNotExist:
+            try:
+                user_ = User.objects.get(phone=email_or_phone)
+            except User.DoesNotExist:
+                user_ = None
+        if user_ is not None:
+            user = authenticate(request,  username=user_.username, password=password)
+            # print(f"authentication: {user}")
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+            else:
+                return render(request, 'chat/LoginPage.html', {'error': 'Invalid login credentials.'})
     
     return render(request, 'chat/LoginPage.html')
-    #     try:
-    #         print(1)
-    #         user = User.objects.get(email=email_or_phone)
-    #         print(f"Username: {user},{email_or_phone}")
-    #         if check_password(password, user.password):
-    #             user.is_online = True
-    #             user.save()
-    #             return redirect('chat-page')
-    #         else:
-    #             return render(request, 'chat/LoginPage.html', {'error_message': 'Invalid email/phone or passsssword'})
-    #     except User.DoesNotExist:
-    #         return render(request, 'chat/LoginPage.html', {'error_message': 'Invalid emaiiiil or password'})
-    # else:
-    #     return render(request, 'chat/LoginPage.html', {'error_message': 'enter the data'})
-
-#     if request.method == 'POST':
-#         email_or_phone = request.POST['email_or_phone']
-#         password = request.POST['password']
-#         user = authenticate(request, username=email_or_phone, password=password)
-#         if user is not None:
-#             login(request, user)
-#             return redirect('chat-page')    
-#         else:
-#             return render(request, 'chat/LoginPage.html', {'error_message': 'Invalid emailll/phone or password'})
-        
-#     else:
-#         return render(request, 'chat/LoginPage.html', {'error_message': 'enter the data'})
-
-# @login_required(login_url='/login/')
+   
 def home(request):
     user = request.user
     connections = Connection.objects.filter(user1=user, connected=True) | Connection.objects.filter(user2=user, connected=True)
@@ -123,7 +103,7 @@ def connect(request):
         other_users = User.objects.filter(~Q(id=user.id), is_online=True)
 
     if other_users:
-        other_user = other_users.first()
+        other_user = random.choice(other_users)
         other_user.is_online = False
         other_user.save()
         room_name = f"{min(user.id, other_user.id)}_{max(user.id, other_user.id)}"
@@ -169,5 +149,6 @@ def toggle_online_status(request):
     return redirect('home')
 
 def logout_view(request):
+    
     logout(request)
     return redirect('base')

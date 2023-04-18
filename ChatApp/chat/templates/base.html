@@ -7,8 +7,9 @@
 <body>
   <nav>
     <ul>
-      <li><a href="{% url 'home' %}">Home</a></li>
+      
       {% if user.is_authenticated %}
+        <li><a href="{% url 'home' %}">Home</a></li>
         <li><a href="{% url 'home' %}">Logout</a></li>
       {% else %}
         <li><a href="{% url 'login-user' %}">Login</a></li>
