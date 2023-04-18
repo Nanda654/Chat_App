@@ -24,7 +24,7 @@ code .
 cd chat_Apppython3.9 -m venv .
 django_env\scripts\activate
 ```
-Use `.\venv\Scripts\activate` if on **Windows.**
+
 
 4. Enter chatapp and activate the server
 ```bash
