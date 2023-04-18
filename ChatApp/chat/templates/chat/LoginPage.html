@@ -1,0 +1,20 @@
+
+
+<!DOCTYPE html>
+<html>
+<body>
+    <form method="post">
+    {% csrf_token %}
+    {% if error_message %}
+        <p>{{ error_message }}</p>
+    {% endif %}
+    <label for="email_or_phone">Email or Phone:</label><br>
+    <input type="text" id="email_or_phone" name="email_or_phone" required><br>
+
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" required><br>
+
+    <input type="submit" value="Log in">
+</form>
+</body>
+</html>

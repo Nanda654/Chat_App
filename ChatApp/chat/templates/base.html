@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}My Site{% endblock %}</title>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="{% url 'home' %}">Home</a></li>
+      {% if user.is_authenticated %}
+        <li><a href="{% url 'home' %}">Logout</a></li>
+      {% else %}
+        <li><a href="{% url 'login-user' %}">Login</a></li>
+        <li><a href="{% url 'signup' %}">Signup</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+  {% block content %}
+    <p>This is the default content.</p>
+  {% endblock %}
+</body>
+</html>

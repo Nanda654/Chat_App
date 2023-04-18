@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Welcome to Chat App</h1>
+    {% if user.is_authenticated %}
+      <p>You are logged in as {{ user.full_name }} from {{ user.country }}
+      <a href="{% url 'logout-user' %}">logout</a></p>
+      {% if user.is_online %}
+        <p>You are currently online</p>
+        {% if user.connection %}
+          <p>You are connected with {{ user.connection.full_name }} from {{ user.connection.country }}</p>
+          <a href="{% url 'disconnect' %}">Disconnect</a>
+        {% else %}
+          <a href="{% url 'connect' %}">Connect with another user</a>
+        {% endif %}
+        <a href="{% url 'toggle_online_status' %}">Go Offline</a>
+      {% else %}
+        <a href="{% url 'toggle_online_status' %}">Go Online</a>
+      {% endif %}
+    {% else %}
+      <p><a href="{% url 'signup' %}">Sign up</a> or <a href="{% url 'login' %}">log in</a> to use the chat app.</p>
+    {% endif %}
+</body>
+</html>
+
+<!-- {% block scripts %}
+<script>
+  let connection_id;
+  let chat_room;
+
+  function connect() {
+    $.post('/connect/', {'action': 'connect', 'csrfmiddlewaretoken': '{{ csrf_token }}'}, function(data) {
+      if (data.success) {
+        connection_id = data.connection_id;
+        chat_room = new WebSocket(`ws://${window.location.host}/ws/chat/${connection_id}/`);
+        chat_room.onmessage = function(event) {
+          const message = JSON.parse(event.data);
+          const chat_div = $('#chat');
+          chat_div.append(`<div><strong>${message.user}: </strong>${message.text}</div>`);
+          chat_div.scrollTop(chat_div.prop("scrollHeight"));
+        }
+        chat_room.onclose = function(event) {
+          if (event.wasClean) {
+            alert(`Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+          } else {
+            alert('Connection closed unexpectedly');
+          }
+          $('#send_btn').prop('disabled', true);
+        }
+        $('#send_btn').prop('disabled', false);
+      } else {
+        alert(data.message);
+      }
+    });
+  }
+
+  function send_message() {
+    const input = $('#message_input');
+    const text = input.val();
+    if (text.length > 0) {
+      chat_room.send(JSON.stringify({'text': text, 'user': '{{ user.full_name }}'}));
+      input.val('');
+    }
+  }
+
+  $(function() {
+    $('#connect_btn').click(connect);
+    $('#send_btn').click(send_message);
+    $('#send_btn').prop('disabled', true);
+    const online_users = $('#online_users');
+    const socket = new WebSocket(`ws://${window.location.host}/ws/online_users/`);
+    socket.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      online_users.empty();
+      for (const user of data.users) {
+        online_users.append(`<li class="list-group-item">${user.full_name} (${user.country})</li>`);
+      }
+    }
+    socket.onclose = function(event) {
+      if (event.wasClean) {
+        alert(`Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+      } else {
+        alert('Connection closed unexpectedly');
+      }
+      $('#connect_btn').prop('disabled', true);
+    }
+  });
+</script>
+{% endblock %} -->
