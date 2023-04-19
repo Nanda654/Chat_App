@@ -76,6 +76,8 @@ def login_view(request):
         if user_ is not None:
             user = authenticate(request, username=user_.username, password=password)
             if user is not None:
+                user.is_online = False
+                user.save()
                 login(request, user)
                 return redirect('home')
             else:
@@ -151,6 +153,9 @@ def toggle_online_status(request):
 
 def logout_view(request):
     # Log the user out (i.e., remove their session from the server)
+    user = request.user
+    user.is_online = False
+    user.save()
     logout(request)
     
     # Redirect the user to the 'base' page
