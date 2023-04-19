@@ -145,7 +145,7 @@ def disconnect(request):
 def toggle_online_status(request):
     # Get the current user object from the request and toggle their online status
     user = request.user
-    user.is_online = not user.is_onlineer.is_online
+    user.is_online = not user.is_online
     user.save()
     return redirect('home')
 
