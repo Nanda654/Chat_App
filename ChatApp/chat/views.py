@@ -124,20 +124,6 @@ def connect(request):
     # If no other users are available, redirect back to the home page
     return redirect('home')
 
-# Define a view for the chat page
-def chat(request, room_name):
-    # Get the current user object from the request and the ID of the other user to chat with from the room name
-    user = request.user
-    other_user_id = room_name.split('_')[1]
-    other_user = User.objects.get(id=other_user_id)
-
-    # Define context variables for the chat page and render the chatpage template, passing in the context
-    context = {
-        'user': user,
-        'other_user': other_user,
-        'room_name': room_name,
-    }
-    return render(request, 'chatpage.html', context)
 
 # Define a view for disconnecting from a chat
 def disconnect(request):
