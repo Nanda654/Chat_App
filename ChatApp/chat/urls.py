@@ -14,6 +14,7 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout-user"),
     path("home/", views.home, name = "home"),
     path("connect/", views.connect, name = "connect"),
+    path("connect/", views.continue_connect, name = "continue_connect"),
     path("disconnect/", views.disconnect, name = "disconnect"),
     path("toggle_online_status/",views.toggle_online_status, name='toggle_online_status'),
 ]

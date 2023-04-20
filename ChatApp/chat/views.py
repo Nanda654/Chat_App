@@ -94,10 +94,12 @@ def home(request):
     # Get the current user object from the request
     user = request.user
     # Get all connections that the user is a part of and that are currently connected or online
-    connections = Connection.objects.filter(user1=user, connected=True) | Connection.objects.filter(user2=user, connected=True)
-    online = Connection.objects.filter(user1=user, online=True) | Connection.objects.filter(user2=user, online=True)
+    connections = Connection.objects.filter(user1=user) | Connection.objects.filter(user2=user)
+    print(connections)
+    online = User.objects.filter(username =user, is_online=True)
     # Return the rendered template for the home page, passing in the user, connections, and online objects as context
     return render(request, 'home.html', {'user': user, 'connections': connections, 'online': online})
+
 
 # Define a view for connecting two users
 def connect(request):
@@ -121,27 +123,30 @@ def connect(request):
         other_user.save()
         # Generate a room name for the chat between the two users and redirect to the chat page for that room
         room_name = f"{min(user.id, other_user.id)}_{max(user.id, other_user.id)}"
+        connection = Connection(user1=user, user2=other_user, room_name=room_name)
+        connection.save()
         return redirect('chat-page', room_name=room_name)
 
     # If no other users are available, redirect back to the home page
     message = "No other users are currently online. Please try again later."
     return render(request, 'home.html', {'message': message})
+def continue_connect(request):
+    user = request.user
+    connections = Connection.objects.filter(user1=user) | Connection.objects.filter(user2=user)
+    room_name = connections[0].room_name
+    return redirect('chat-page', room_name=room_name)
 
 
 # Define a view for disconnecting from a chat
 def disconnect(request):
     # Get the current user object from the request and their connection object
     user = request.user
-    connection = user.connection
-    # Determine which user in the connection is the current user and set their online status to False
-    if connection.user1 == user:
-        connection.user1_online = False
-        connection.user1 = None
-    else:
-        connection.user2_online = False
-        connection.user2 = None
-    # Save the changes to the connection object and redirect back to the home page
-    connection.save()
+    # Get all connections that the user is a part of and that are currently connected or online
+    connections = Connection.objects.filter(user1=user) | Connection.objects.filter(user2=user)
+    
+    # Delete all the existing connections that the current user has
+    for connection in connections:
+        connection.delete()
     return redirect('home')
 
 # Define a view for toggling the online status of the current user

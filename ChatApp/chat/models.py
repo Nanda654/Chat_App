@@ -38,5 +38,5 @@ class Connection(models.Model):
     # A connection is between two users
     user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='connections1')
     user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='connections2')
-    connected = models.BooleanField(default=False) # Indicates if the users are connected or not
-    online = models.BooleanField(default=False) # Indicates if the connection is currently online or not
+    room_name = models.CharField(max_length=50)
+    connected_at = models.DateTimeField(auto_now_add=True)
