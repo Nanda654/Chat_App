@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <script>
+      var ws = new WebSocket("ws://localhost:8000/ws/");
+      ws.onmessage = function(event) {
+        var data = JSON.parse(event.data);
+        if (data.type == "connection_request") {
+          alert(data.message);
+        }
+      };
+    </script>
+  </head>
 <body>
     <h1>Welcome to Chat App</h1>
     {% if user.is_authenticated %}
@@ -12,6 +23,9 @@
           <a href="{% url 'disconnect' %}">Disconnect</a>
         {% else %}
           <a href="{% url 'connect' %}">Connect with another user</a>
+          {% if message %}
+          <p>{{ message }}</p>
+          {% endif %}
         {% endif %}
         <a href="{% url 'toggle_online_status' %}">Go Offline</a>
       {% else %}

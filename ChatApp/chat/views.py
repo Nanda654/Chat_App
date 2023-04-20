@@ -124,7 +124,8 @@ def connect(request):
         return redirect('chat-page', room_name=room_name)
 
     # If no other users are available, redirect back to the home page
-    return redirect('home')
+    message = "No other users are currently online. Please try again later."
+    return render(request, 'home.html', {'message': message})
 
 
 # Define a view for disconnecting from a chat

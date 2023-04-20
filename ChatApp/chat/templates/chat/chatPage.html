@@ -19,6 +19,7 @@
       <br />
       <input type="text" id="id_message_send_input" />
       <button type="submit" id="id_message_send_button">Send Message</button>
+      <button type="button" id="id_disconnect_button">Disconnect</button> <!-- Add disconnect button -->
       <br />
       <br />
     </div>
@@ -30,6 +31,7 @@
       };
       chatSocket.onclose = function (e) {
         console.log("Something unexpected happened !");
+        redirectToHome(); // Redirect user to home page after disconnecting WebSocket
       };
       document.querySelector("#id_message_send_input").focus();
       document.querySelector("#id_message_send_input").onkeyup = function (e) {
@@ -43,6 +45,10 @@
         ).value;
         chatSocket.send(JSON.stringify({ message: messageInput, username : "{{request.user.username}}"}));
       };
+      document.querySelector("#id_disconnect_button").onclick = function (e) { // Add onclick handler for disconnect button
+        chatSocket.close();
+        
+      };
       chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
         var div = document.createElement("div");
@@ -50,6 +56,10 @@
         document.querySelector("#id_message_send_input").value = "";
         document.querySelector("#id_chat_item_container").appendChild(div);
       };
+      function redirectToHome() { // Define function to redirect to home page
+        window.location.href = "{% url 'home' %}"; // Replace with the URL of your home page
+      }
+      
     </script>
   </body>
 </html>
