@@ -1,0 +1,77 @@
+/* Style for the chat container */
+.chat__item__container div {
+    margin-top: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 18px;
+    animation: scroll-up 0.2s linear forwards; /* add animation property */
+  }
+  
+  /* Define the scroll-up animation */
+  @keyframes scroll-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  /* Style for the message input field */
+  #id_message_send_input {
+    width: 60%;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    font-size: 18px;
+    margin-right: 10px;
+  }
+  
+  /* Style for the send button */
+  #id_message_send_button {
+    padding: 10px 20px;
+    background-color: #1abc9c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  /* Style for the disconnect button */
+  #id_disconnect_button {
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+  }
+  
+  /* Style for the chat messages */
+  .chat__item__container div {
+    margin-top: 10px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 18px;
+  }
+  
+  /* Style for the chat messages from the current user */
+  .chat__item__container div.current-user {
+    background-color: #1abc9c;
+    color: #fff;
+  }
+  
+  /* Style for the chat messages from other users */
+  .chat__item__container div.other-user {
+    background-color: #e74c3c;
+    color: #fff;
+    float: left;
+    clear: both;
+    margin-right: 10px;
+  }

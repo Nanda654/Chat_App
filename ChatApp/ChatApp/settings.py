@@ -132,3 +132,5 @@ LOGIN_REDIRECT_URL = "chat-page"
 LOGOUT_REDIRECT_URL = "login-user"
 
 AUTH_USER_MODEL = 'chat.User'
+
+STATIC_URL = '/static/'

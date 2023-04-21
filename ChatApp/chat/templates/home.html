@@ -1,7 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
-    <script>
+    <meta charset="UTF-8">
+    <title>My Chat App</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+    <!-- <script>
       var ws = new WebSocket("ws://localhost:8000/ws/");
       ws.onmessage = function(event) {
         var data = JSON.parse(event.data);
@@ -9,7 +13,7 @@
           alert(data.message);
         }
       };
-    </script>
+    </script> -->
   </head>
 <body>
     <h1>Welcome to Chat App</h1>
