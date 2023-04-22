@@ -1,10 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>{% block title %}My Site{% endblock %}</title>
-</head>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>My Chat App</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+  </head>
 <body>
+    <h1>Welcome to Chat App</h1>
   <nav>
     <ul>
       
