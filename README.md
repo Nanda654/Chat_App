@@ -11,22 +11,28 @@ chatapp to connect to people with similar interests using Django channels
 mkdir ~/Dev
 cd ~/Dev
 git clone https://github.com/Nanda654/Chat_App.git
-cd Chatapp
+
 ```
 
-2. Open VSCode
+2. Enter the Chat_app and activate the virtual environment .
+
+```bash
+python -m venv env
+env\scripts\activate
+```
+
+3. Open VSCode or any code editor of convenience if needed.
 ```bash
 code .
 ```
-3. Enter the Chat_app and activate the virtual environment .
 
+3. install all the requirments from requirements.txt in the chatapp directory
 ```bash
-cd chat_Apppython3.9 -m venv .
-django_env\scripts\activate
+cd chatapp
+pip install -r requirements.txt
 ```
 
-
-4. Enter chatapp and activate the server
+4. Activate the server
 ```bash
 cd chatapp
 python manage.py runserver
