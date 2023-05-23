@@ -20,13 +20,9 @@
     {% if user.is_authenticated %}
       <p>You are logged in as {{ user.full_name }} from {{ user.country }}
       <a href="{% url 'logout-user' %}">logout</a></p>
-        {% if connections %}
-          <p>You are connected to another user</p>
-          <ul>
-              {% for user in connected_users %}
-                  <li>{{ user.username }}</li>
-              {% endfor %}
-          </ul>
+        {% if other_user %}
+          <p>You are alread in connection with {{other_user}}</p>
+          
           <a href="{% url 'continue_connect' %}">continue the connection</a>
           <a href="{% url 'disconnect' %}">Disconnect</a>
         

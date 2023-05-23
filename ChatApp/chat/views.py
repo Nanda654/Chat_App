@@ -95,11 +95,24 @@ def home(request):
     user = request.user
     # Get all connections that the user is a part of and that are currently connected or online
     connections = Connection.objects.filter(user1=user) | Connection.objects.filter(user2=user)
-    print(connections)
-    online = User.objects.filter(username =user, is_online=True)
-    # Return the rendered template for the home page, passing in the user, connections, and online objects as context
-    return render(request, 'home.html', {'user': user, 'connections': connections, 'online': online})
-
+    # print(connections)
+    for connection in connections:
+        room_name = connection.room_name    
+    # Extract the other user's id from the room name
+    if connections:
+        other_user_id = room_name.split('_')
+        # Determine the other user based on the id and the current user
+        if (user.id == int(other_user_id[0])):
+            other_user = User.objects.get(id=other_user_id[1])
+        else:
+            other_user = User.objects.get(id=other_user_id[0])
+        online = User.objects.filter(username =user, is_online=True)
+        # Return the rendered template for the home page, passing in the user, connections, and online objects as context
+        return render(request, 'home.html', {'user': user, 'other_user': other_user, 'online': online})
+    else:
+        online = User.objects.filter(username =user, is_online=True)
+        # Return the rendered template for the home page, passing in the user, connections, and online objects as context
+        return render(request, 'home.html', {'user': user, 'online': online})
 
 # Define a view for connecting two users
 def connect(request):
@@ -108,6 +121,9 @@ def connect(request):
     user.is_online = True
     user.save()
 
+    connections = Connection.objects.filter(user1=user) | Connection.objects.filter(user2=user)
+    if connections:
+        return redirect('continue_connect')
     # Get all interests of the current user
     interests = user.interests.all()
     # Find other users who have at least one shared interest with the current user and are online
@@ -163,6 +179,5 @@ def logout_view(request):
     user.is_online = False
     user.save()
     logout(request)
-    
     # Redirect the user to the 'base' page
     return redirect('base')
