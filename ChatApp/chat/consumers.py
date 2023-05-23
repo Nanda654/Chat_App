@@ -27,6 +27,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        
+        # Broadcast disconnection message to the remaining users in the room
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'user_disconnected',
+                'username': self.scope['user'].username
+            }
+        )
+
+    # ...
+
+    # Receive a user_disconnected message from the room's channel group
+    async def user_disconnected(self, event):
+        username = event['username']
+        message = f'{username} has been disconnected.'
+
+        # Send the disconnection message to the client
+        await self.send(text_data=json.dumps({
+            'message': message,
+            'username': 'System'  # Use a special username or 'System' to represent system messages
+        }))
 
     # Runs when a client sends a message over the WebSocket
     async def receive(self, text_data):
